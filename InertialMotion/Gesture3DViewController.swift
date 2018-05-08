@@ -204,8 +204,8 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         if fileData == nil || fileData?.length == 0 {
             return
         }
-        let emailTitle = "But ain't nan you hoes pussy good like me"
-        let messageBody = "Data from a ballsack"
+        let emailTitle = "0000000000000000000000000000000000"
+        let messageBody = "Data from jim"
         let mc = MFMailComposeViewController()
         mc.mailComposeDelegate = self
         mc.setSubject(emailTitle)
