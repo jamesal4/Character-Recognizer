@@ -192,6 +192,7 @@
                     <tabBarItem key="tabBarItem" title="3D" image="3d" id="cPa-gy-q4n"/>
                     <connections>
                         <outlet property="countLabel" destination="Lyf-t1-O0d" id="Bpg-Ey-9S4"/>
+                        <outlet property="glkView" destination="KeT-i5-3Nj" id="oJm-Bw-n3R"/>
                         <outlet property="letterControl" destination="sTD-dW-gvf" id="SzG-pq-Wsh"/>
                         <outlet property="recognizedLabel" destination="cBT-Jp-fAb" id="bh0-eZ-H0a"/>
                     </connections>

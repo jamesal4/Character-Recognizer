@@ -24,6 +24,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     @IBOutlet weak var recognizedLabel: UILabel?
     @IBOutlet weak var letterControl: UISegmentedControl!
     @IBOutlet weak var countLabel: UILabel!
+    @IBOutlet weak var glkView: GLKView!
     
     var touchCount: Int = 0
     var motionManager: CMMotionManager = CMMotionManager()
@@ -54,6 +55,8 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         }
         
         self.letterControl.addTarget(self, action:#selector(Gesture3DViewController.letterControlChanged(_:)), for: .valueChanged)
+        
+        self.countLabel.textColor = .white
     }
     
     @objc fileprivate func letterControlChanged(_ sender: UIDatePicker) {
@@ -87,8 +90,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         updateTouches(event)
         logging = true
         print("touches began")
-        self.view.backgroundColor = .green
-        
+        self.glkView.backgroundColor = .green
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -103,7 +105,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         logLineToDataFile(line)
         let curCount = Int(countLabel.text!)!
         countLabel.text = String(curCount+1)
-        self.view.backgroundColor = .red
+        self.glkView.backgroundColor = .red
         print("touches ended")
         
     }
