@@ -1,7 +1,24 @@
 import csv
 import numpy as np
 
-data = []
+zData = []
+n = 0
+with open('JamesZ.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    innerArray = []
+    for row in reader:
+        if row[0] == "Time":
+            continue
+        npRow = np.array(row[:-1],dtype=np.float32)[1:]
+        if npRow.all() == np.zeros(6).all():
+            n += 1
+            zData.append(innerArray)
+            innerArray = []
+        else:
+            innerArray.append(npRow)
+zLabels = np.array(["Z"]*n)
+
+nData = []
 n = 0
 with open('JamesN.csv') as csvfile:
     reader = csv.reader(csvfile)
@@ -12,8 +29,8 @@ with open('JamesN.csv') as csvfile:
         npRow = np.array(row[:-1],dtype=np.float32)[1:]
         if npRow.all() == np.zeros(6).all():
             n += 1
-            trainData.append(innerArray)
+            nData.append(innerArray)
             innerArray = []
         else:
             innerArray.append(npRow)
-labels = np.array(["N"]*n)
+nLabels = np.array(["N"]*n)
