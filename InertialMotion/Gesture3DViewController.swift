@@ -87,6 +87,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         updateTouches(event)
         logging = true
         print("touches began")
+        self.view.backgroundColor = .green
         
     }
     
@@ -102,6 +103,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         logLineToDataFile(line)
         let curCount = Int(countLabel.text!)!
         countLabel.text = String(curCount+1)
+        self.view.backgroundColor = .red
         print("touches ended")
         
     }
