@@ -58,6 +58,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     
     @objc fileprivate func letterControlChanged(_ sender: UIDatePicker) {
         print("letter control changed")
+        countLabel.text = "0"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -99,6 +100,8 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         let zero = String(0)
         let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", zero, zero, zero, zero, zero, zero, zero, zero)
         logLineToDataFile(line)
+        let curCount = Int(countLabel.text!)!
+        countLabel.text = String(curCount+1)
         print("touches ended")
         
     }
