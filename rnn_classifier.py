@@ -58,6 +58,8 @@ for ix, example in enumerate(allData):
   x.append(np.array(example_row))
   y.append(np.array(allLabels[ix]))
 
+print(x[0])
+
 x = np.array(x) # x.shape = (100, 1476)
 y = np.array(y) # y.shape = (100, 2)
 x = x.reshape(100, 1, 1476)
