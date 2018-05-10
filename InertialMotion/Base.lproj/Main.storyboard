@@ -159,9 +159,17 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="sTD-dW-gvf">
-                                <rect key="frame" x="163" y="137" width="49" height="29"/>
+                                <rect key="frame" x="48" y="137" width="279" height="29"/>
                                 <segments>
-                                    <segment title="N"/>
+                                    <segment title="A"/>
+                                    <segment title="B"/>
+                                    <segment title="C"/>
+                                    <segment title="D"/>
+                                    <segment title="E"/>
+                                    <segment title="V"/>
+                                    <segment title="W"/>
+                                    <segment title="X"/>
+                                    <segment title="Y"/>
                                     <segment title="Z"/>
                                 </segments>
                             </segmentedControl>

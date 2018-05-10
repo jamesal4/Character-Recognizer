@@ -130,8 +130,24 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
             var letter = "something is wrong if you see this"
             switch self.letterControl.selectedSegmentIndex {
                 case 0:
-                    letter = "N"
+                    letter = "A"
                 case 1:
+                    letter = "B"
+                case 2:
+                    letter = "C"
+                case 3:
+                    letter = "D"
+                case 4:
+                    letter = "E"
+                case 5:
+                    letter = "V"
+                case 6:
+                    letter = "W"
+                case 7:
+                    letter = "X"
+                case 8:
+                    letter = "Y"
+                case 9:
                     letter = "Z"
                 default: ()
             }
