@@ -91,6 +91,3 @@ test_accuracy = calculate_accuracy(testPredict, testY)
 print 'training accuracy', training_accuracy
 print 'test accuracy', test_accuracy
 
-
-
-
