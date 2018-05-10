@@ -20,8 +20,8 @@ with open('JamesZ.csv') as csvfile:
             innerArray = []
         else:
             innerArray.append(npRow)
-zLabels = np.array([0,1]*n)
-allLabels.append(zLabels)
+zLabels = np.array([[0,1]]*n)
+allLabels.extend(zLabels)
 
 nData = []
 n = 0
@@ -39,8 +39,8 @@ with open('JamesN.csv') as csvfile:
             innerArray = []
         else:
             innerArray.append(npRow)
-nLabels = np.array([1,0]*n)
-allLabels.append(nLabels)
+nLabels = np.array([[1,0]]*n)
+allLabels.extend(nLabels)
 
 allData = np.array(allData)
 allLabels = np.array(allLabels)
