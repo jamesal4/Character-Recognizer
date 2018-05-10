@@ -65,9 +65,28 @@ with open('JamesN.csv') as csvfile:
 nLabels = np.array([[1,0,0]]*n)
 allLabels.extend(nLabels)
 
-aData = []
+# aData = []
+# n = 0
+# with open('JamesA.csv') as csvfile:
+#     reader = csv.reader(csvfile)
+#     innerArray = []
+#     for row in reader:
+#         if row[0] == "Time":
+#             continue
+#         npRow = np.array(row[:-1],dtype=np.float32)[1:]
+#         if npRow.all() == np.zeros(6).all():
+#             n += 1
+#             allData.append(innerArray)
+#             aData.append(innerArray)
+#             innerArray = []
+#         else:
+#             innerArray.append(npRow)
+# aLabels = np.array([[0,0,1]]*n)
+# allLabels.extend(nLabels)
+
+vData = []
 n = 0
-with open('JamesA.csv') as csvfile:
+with open('JamesV.csv') as csvfile:
     reader = csv.reader(csvfile)
     innerArray = []
     for row in reader:
@@ -77,11 +96,11 @@ with open('JamesA.csv') as csvfile:
         if npRow.all() == np.zeros(6).all():
             n += 1
             allData.append(innerArray)
-            aData.append(innerArray)
+            vData.append(innerArray)
             innerArray = []
         else:
             innerArray.append(npRow)
-aLabels = np.array([[0,0,1]]*n)
+nLabels = np.array([[1,0,0]]*n)
 allLabels.extend(nLabels)
 
 allData = np.array(allData)
