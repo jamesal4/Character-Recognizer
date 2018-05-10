@@ -1,12 +1,14 @@
 from csvImporting import allData, allLabels
 import keras
+import math
 import numpy as np
 
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, TimeDistributed
 from keras.utils import to_categorical
 
-# from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error
 
 
 ############# Helper functions
@@ -15,11 +17,29 @@ def unison_shuffle(a, b):
   p = np.random.permutation(len(a))
   return a[p], b[p]
 
+def dot_product(v1, v2):
+  return v1[0]*v2[0] + v1[1]*v2[1]
 
-## Step 1 - Filter gyroscope/accelerometer data to include relevant datapoints
-## Step 2 - run the examples through the network
+def calculate_accuracy(predictions, actual):
+  assert len(predictions) == len(actual)
+
+  numTotalPredictions = len(predictions)
+  numCorrectPredictions = 0
+  for ix in range(numTotalPredictions):
+    if round(dot_product(predictions[ix], actual[ix])) == 1.0:
+      numCorrectPredictions += 1
+
+  return float(numCorrectPredictions)/numTotalPredictions
+
+def calculate_mse(predictions, actual):
+  pass
+
+############# Helper functions
 
 
+## TODO:
+# - rescale inputs (MaxMinScaler)
+# - filter the gyroscope/accelerometer data to include only relevant datapoints
 
 
 ## pad examples so that they are of equal length
@@ -41,6 +61,7 @@ for ix, example in enumerate(allData):
 x = np.array(x) # x.shape = (100, 1476)
 y = np.array(y) # y.shape = (100, 2)
 x = x.reshape(100, 1, 1476)
+y = y.reshape(100, 2)
 
 x, y = unison_shuffle(x, y)
 
@@ -56,7 +77,7 @@ model = Sequential()
 model.add(LSTM(numLSTMBlocks, input_shape=(1, maxLength*6)))
 model.add(Dense(2))
 model.compile(loss='mean_squared_error', optimizer='adam')
-for i in range(100):
+for i in range(1):
   model.fit(trainX, trainY, epochs=1, batch_size=10, verbose=2, shuffle=False)
   model.reset_states()
 
@@ -64,18 +85,11 @@ for i in range(100):
 trainPredict = model.predict(trainX)
 testPredict = model.predict(testX)
 
-# # invert predictions
-# trainPredict = scaler.inverse_transform(trainPredict)
-# trainY = scaler.inverse_transform([trainY])
-# testPredict = scaler.inverse_transform(testPredict)
-# testY = scaler.inverse_transform([testY])
+training_accuracy = calculate_accuracy(trainPredict, trainY)
+test_accuracy = calculate_accuracy(testPredict, testY)
 
-# # calculate root mean squared error
-# trainScore = math.sqrt(mean_squared_error(trainY[0], trainPredict[:,0]))
-# print('Train Score: %.2f RMSE' % (trainScore))
-# testScore = math.sqrt(mean_squared_error(testY[0], testPredict[:,0]))
-# print('Test Score: %.2f RMSE' % (testScore))
-
+print 'training accuracy', training_accuracy
+print 'test accuracy', test_accuracy
 
 
 
