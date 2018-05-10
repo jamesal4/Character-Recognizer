@@ -58,12 +58,14 @@ for ix, example in enumerate(allData):
   x.append(np.array(example_row))
   y.append(np.array(allLabels[ix]))
 
+
+x = np.array(x) # x.shape = (100, 1476)
+y = np.array(y) # y.shape = (100, 2)
+
 assert x.shape[0] == y.shape[0]
 n = x.shape[0]
 outputDim = y.shape[1]
 
-x = np.array(x) # x.shape = (100, 1476)
-y = np.array(y) # y.shape = (100, 2)
 x = x.reshape(n, 1, 1476)
 y = y.reshape(n, outputDim)
 
@@ -74,15 +76,15 @@ numTrainExamples = int(.7*len(x))
 trainX, trainY = x[:numTrainExamples], y[:numTrainExamples]
 testX, testY = x[numTrainExamples:], y[numTrainExamples:]
 
-numLSTMBlocks = 9
+numLSTMBlocks = 10
 
 # 2c - create and fit lstm network
 model = Sequential()
 model.add(LSTM(numLSTMBlocks, input_shape=(1, maxLength*6)))
-model.add(Dense(2))
+model.add(Dense(outputDim))
 model.compile(loss='mean_squared_error', optimizer='adam')
 for i in range(1):
-  model.fit(trainX, trainY, epochs=10, batch_size=1, verbose=2, shuffle=False)
+  model.fit(trainX, trainY, epochs=20, batch_size=1, verbose=2, shuffle=False)
   model.reset_states()
 
 # make predictions
