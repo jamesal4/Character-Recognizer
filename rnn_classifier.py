@@ -58,12 +58,14 @@ for ix, example in enumerate(allData):
   x.append(np.array(example_row))
   y.append(np.array(allLabels[ix]))
 
-print(x[0])
+assert x.shape[0] == y.shape[0]
+n = x.shape[0]
+outputDim = y.shape[1]
 
 x = np.array(x) # x.shape = (100, 1476)
 y = np.array(y) # y.shape = (100, 2)
-x = x.reshape(100, 1, 1476)
-y = y.reshape(100, 2)
+x = x.reshape(n, 1, 1476)
+y = y.reshape(n, outputDim)
 
 x, y = unison_shuffle(x, y)
 
