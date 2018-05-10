@@ -76,7 +76,7 @@ numTrainExamples = int(.7*len(x))
 trainX, trainY = x[:numTrainExamples], y[:numTrainExamples]
 testX, testY = x[numTrainExamples:], y[numTrainExamples:]
 
-numLSTMBlocks = 10
+numLSTMBlocks = 100
 
 # 2c - create and fit lstm network
 model = Sequential()
@@ -84,7 +84,7 @@ model.add(LSTM(numLSTMBlocks, input_shape=(1, maxLength*6)))
 model.add(Dense(outputDim))
 model.compile(loss='mean_squared_error', optimizer='adam')
 for i in range(1):
-  model.fit(trainX, trainY, epochs=40, batch_size=5, verbose=2, shuffle=False)
+  model.fit(trainX, trainY, epochs=50, batch_size=2, verbose=2, shuffle=False)
   model.reset_states()
 
 # make predictions
