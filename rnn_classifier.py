@@ -84,7 +84,7 @@ model.add(LSTM(numLSTMBlocks, input_shape=(1, maxLength*6)))
 model.add(Dense(outputDim))
 model.compile(loss='mean_squared_error', optimizer='adam')
 for i in range(1):
-  model.fit(trainX, trainY, epochs=20, batch_size=1, verbose=2, shuffle=False)
+  model.fit(trainX, trainY, epochs=40, batch_size=5, verbose=2, shuffle=False)
   model.reset_states()
 
 # make predictions

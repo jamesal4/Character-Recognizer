@@ -2,9 +2,30 @@ import csv
 import numpy as np
 
 #TODO: Automate this from an array of letters
-
+letters = ["A","N","Z"]
 allData = []
 allLabels = []
+
+# for i in range(len(letters)):
+#     n = 0
+#     letter = letters[i]
+#     with open('James'+letter+'.csv') as csvfile:
+#         reader = csv.reader(csvfile)
+#         innerArray = []
+#         for row in reader:
+#             if row[0] == "Time":
+#                 continue
+#             npRow = np.array(row[:-1],dtype=np.float32)[1:]
+#             if npRow.all() == np.zeros(6).all():
+#                 n += 1
+#                 allData.append(innerArray)
+#                 innerArray = []
+#             else:
+#                 innerArray.append(npRow)
+#     oneHot = [0]*len(letters)
+#     oneHot[i] = 1
+#     labels = np.array([oneHot]*n)
+#     allLabels.extend(labels)
 
 zData = []
 n = 0
