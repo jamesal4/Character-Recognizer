@@ -41,51 +41,52 @@ def calculate_mse(predictions, actual):
 # - rescale inputs (MaxMinScaler)
 # - filter the gyroscope/accelerometer data to include only relevant datapoints
 
+#maxLength = max([len(ex) for ex in allData])
 
-## pad examples so that they are of equal length
-x = []
-y = []
-maxLength = max([len(ex) for ex in allData])
-
-for ix, example in enumerate(allData):
-  example_row = []
-  for val in example:
-    example_row.extend(val)
-
-  pad_length = (maxLength - len(example))*6
-  example_row.extend([0.]*pad_length)
-
-  x.append(np.array(example_row))
-  y.append(np.array(allLabels[ix]))
+# for ix, example in enumerate(allData):
+#   example_row = []
+#   for val in example:
+#     example_row.extend(val)
+#
+#   pad_length = (maxLength - len(example))*6
+#   example_row.extend([0.]*pad_length)
+#
+#   x.append(np.array(example_row))
+#   y.append(np.array(allLabels[ix]))
 
 
-x = np.array(x) # x.shape = (100, 1476)
-y = np.array(y) # y.shape = (100, 2)
+x = allData[:,:,3:]#np.array(x) # x.shape = (100, 1476)
+y = allLabels#np.array(y) # y.shape = (100, 2)
+
+print("x.shape: " + str(x.shape))
+
+seqLen = x.shape[1]
 
 assert x.shape[0] == y.shape[0]
 n = x.shape[0]
+inputDim = x.shape[2]
 outputDim = y.shape[1]
 
-x = x.reshape(n, 1, 1476)
-y = y.reshape(n, outputDim)
+#x = x.reshape(n, 1, 1476)
+#y = y.reshape(n, outputDim)
 
-x, y = unison_shuffle(x, y)
+#x, y = unison_shuffle(x, y)
 
 ## split data into train/test sets
 numTrainExamples = int(.7*len(x))
 trainX, trainY = x[:numTrainExamples], y[:numTrainExamples]
 testX, testY = x[numTrainExamples:], y[numTrainExamples:]
 
-numLSTMBlocks = 100
+numLSTMBlocks = 10
 
 # 2c - create and fit lstm network
 model = Sequential()
-model.add(LSTM(numLSTMBlocks, input_shape=(1, maxLength*6)))
+model.add(LSTM(numLSTMBlocks, input_dim=inputDim, input_length=seqLen))
 model.add(Dense(outputDim))
 model.compile(loss='mean_squared_error', optimizer='adam')
-for i in range(1):
-  model.fit(trainX, trainY, epochs=50, batch_size=2, verbose=2, shuffle=False)
-  model.reset_states()
+
+model.fit(trainX, trainY, epochs=20, batch_size=5, verbose=2, shuffle=False)
+model.reset_states()
 
 # make predictions
 trainPredict = model.predict(trainX)
