@@ -24,6 +24,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     @IBOutlet weak var recognizedLabel: UILabel?
     @IBOutlet weak var letterControl: UISegmentedControl!
     @IBOutlet weak var countLabel: UILabel!
+    @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var glkView: GLKView!
     
     var touchCount: Int = 0
@@ -44,7 +45,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         if self.logFile == nil {
             assert(false, "Couldn't open file for writing (" + self.getPathToLogFile() + ").")
         }
-        self.logLineToDataFile("Time,Roll,Pitch,Yaw,AccelX,AccelY,AccelZ,Letter\n")
+        self.logLineToDataFile("Time,Roll,Pitch,Yaw,AccelX,AccelY,AccelZ,Letter,Name\n")
         
         motionManager.deviceMotionUpdateInterval = 1e-2
         
@@ -101,7 +102,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         updateTouches(event)
         logging = false
         let zero = String(0)
-        let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", zero, zero, zero, zero, zero, zero, zero, zero)
+        let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@,%@\n", zero, zero, zero, zero, zero, zero, zero, zero, zero)
         logLineToDataFile(line)
         let curCount = Int(countLabel.text!)!
         countLabel.text = String(curCount+1)
@@ -152,9 +153,11 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
                 default: ()
             }
             
+            let name = nameTextField.text!
+            
             let timeInterval = String(NSDate().timeIntervalSince1970)
             // write acceleration, timeInterval, and attitude to file
-            let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", timeInterval, roll, pitch, yaw, accelX, accelY, accelZ,letter)
+            let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", timeInterval, roll, pitch, yaw, accelX, accelY, accelZ,letter,name)
             logLineToDataFile(line)
         }
     }
