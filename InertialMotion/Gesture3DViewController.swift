@@ -66,6 +66,8 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         datePicker.dataSource = self
         self.nameTextField.inputView = datePicker
         datePicker.selectRow(0, inComponent: 0, animated: false)
+        print("numComponents: "+String(datePicker.numberOfComponents))
+        //print("")
     }
     
     @objc fileprivate func letterControlChanged(_ sender: UIDatePicker) {
@@ -231,14 +233,14 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 26
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return 1
     }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 26
+    }
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return LETTERS[component]
+        return LETTERS[row]
     }
 }
