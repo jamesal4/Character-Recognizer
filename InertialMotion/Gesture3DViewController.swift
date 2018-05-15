@@ -19,12 +19,13 @@ private func GLKVector3FromCMAcceleration(_ acceleration: CMAcceleration) -> GLK
     return GLKVector3Make(Float(acceleration.x), Float(acceleration.y), Float(acceleration.z))
 }
 
-class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, MFMailComposeViewControllerDelegate {
+class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, MFMailComposeViewControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var recognizedLabel: UILabel?
     @IBOutlet weak var letterControl: UISegmentedControl!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var letterTextField: UITextField!
     @IBOutlet weak var glkView: GLKView!
     
     var touchCount: Int = 0
@@ -58,6 +59,11 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         self.letterControl.addTarget(self, action:#selector(Gesture3DViewController.letterControlChanged(_:)), for: .valueChanged)
         
         self.countLabel.textColor = .white
+        
+        let datePicker = UIPickerView()
+        datePicker.delegate = self
+        datePicker.dataSource = self
+        self.nameTextField.inputView = datePicker
     }
     
     @objc fileprivate func letterControlChanged(_ sender: UIDatePicker) {
@@ -243,5 +249,17 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     
     @IBAction func hitClearButton(_ sender: UIButton) {
         self.resetLogFile()
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 26
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return LETTERS[component]
     }
 }
