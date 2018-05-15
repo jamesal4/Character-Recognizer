@@ -221,20 +221,24 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
             self.alert?.addAction(ok)
             self.present(self.alert!, animated: true, completion: nil)
             return
+        } else {
+            let fileData = NSData(contentsOfFile: self.getPathToLogFile())
+            if fileData == nil || fileData?.length == 0 {
+                return
+            }
+            let emailTitle = "0000000000000000000000000000000000"
+            let messageBody = "Data from jim"
+            let mc = MFMailComposeViewController()
+            mc.mailComposeDelegate = self
+            mc.setSubject(emailTitle)
+            mc.setMessageBody(messageBody, isHTML: false)
+            mc.addAttachmentData(fileData! as Data, mimeType: "text/plain", fileName: DATA_FILE_NAME)
+            self.present(mc, animated: true, completion: nil)
         }
-        
-        let fileData = NSData(contentsOfFile: self.getPathToLogFile())
-        if fileData == nil || fileData?.length == 0 {
-            return
-        }
-        let emailTitle = "0000000000000000000000000000000000"
-        let messageBody = "Data from jim"
-        let mc = MFMailComposeViewController()
-        mc.mailComposeDelegate = self
-        mc.setSubject(emailTitle)
-        mc.setMessageBody(messageBody, isHTML: false)
-        mc.addAttachmentData(fileData as! Data, mimeType: "text/plain", fileName: DATA_FILE_NAME)
-        self.present(mc, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func hitClearButton(_ sender: UIButton) {
