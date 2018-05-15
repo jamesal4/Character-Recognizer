@@ -38,7 +38,8 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     var alert: UIAlertController? = nil
     var logging: Bool = false
     let DATA_FILE_NAME = "log.csv"
-    var LETTER: String = nil
+    var LETTER: String = ""
+    var LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,14 +59,13 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
                 self?.accumulateMotion(motion)
         }
         
-        self.letterControl.addTarget(self, action:#selector(Gesture3DViewController.letterControlChanged(_:)), for: .valueChanged)
-        
         self.countLabel.textColor = .white
         
         let datePicker = UIPickerView()
         datePicker.delegate = self
         datePicker.dataSource = self
         self.nameTextField.inputView = datePicker
+        datePicker.selectRow(0, inComponent: 0, animated: false)
     }
     
     @objc fileprivate func letterControlChanged(_ sender: UIDatePicker) {
@@ -137,35 +137,12 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
             let accelZ = String(userAcceleration.z)
             
             LETTER = "something is wrong if you see this"
-            switch self.letterControl.selectedSegmentIndex {
-                case 0:
-                    LETTER = "A"
-                case 1:
-                    LETTER = "B"
-                case 2:
-                    LETTER = "C"
-                case 3:
-                    LETTER = "D"
-                case 4:
-                    LETTER = "E"
-                case 5:
-                    LETTER = "V"
-                case 6:
-                    LETTER = "W"
-                case 7:
-                    LETTER = "X"
-                case 8:
-                    LETTER = "Y"
-                case 9:
-                    LETTER = "Z"
-                default: ()
-            }
             
             let name = nameTextField.text!
             
             let timeInterval = String(NSDate().timeIntervalSince1970)
             // write acceleration, timeInterval, and attitude to file
-            let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", timeInterval, roll, pitch, yaw, accelX, accelY, accelZ,letter,name)
+            let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", timeInterval, roll, pitch, yaw, accelX, accelY, accelZ,LETTER,name)
             logLineToDataFile(line)
         }
     }
