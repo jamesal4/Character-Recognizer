@@ -70,7 +70,12 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     
     @objc fileprivate func letterControlChanged(_ sender: UIDatePicker) {
         print("letter control changed")
-        countLabel.text = "0"
+        if let val = letterCount[LETTER] {
+            countLabel.text = String(val)
+        } else {
+            letterCount[LETTER] = 0
+            countLabel.text = "0"
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -112,11 +117,10 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         let zero = String(0)
         let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@,%@\n", zero, zero, zero, zero, zero, zero, zero, zero, zero)
         logLineToDataFile(line)
-        let curCount = Int(countLabel.text!)!
-        countLabel.text = String(curCount+1)
+        letterCount[LETTER]! += 1
+        countLabel.text = String(letterCount[LETTER]!)
         self.glkView.backgroundColor = .red
         print("touches ended")
-        
     }
     
     func accumulateMotion(_ motion: CMDeviceMotion?) {
@@ -195,6 +199,11 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         if self.logFile == nil {
             assert(false, "Couldn't open file for writing (" + self.getPathToLogFile() + ").")
         }
+        
+        self.logLineToDataFile("Time,Roll,Pitch,Yaw,AccelX,AccelY,AccelZ,Letter,Name\n")
+        letterCount.removeAll()
+        letterCount[LETTER] = 0
+        countLabel.text = "0"
     }
     
     @IBAction func emailLogFile(_ sender: UIButton) {
