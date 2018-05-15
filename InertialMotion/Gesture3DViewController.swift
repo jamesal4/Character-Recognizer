@@ -28,6 +28,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     @IBOutlet weak var glkView: GLKView!
     
     var touchCount: Int = 0
+    var letterCount = [String: Int]()
     var motionManager: CMMotionManager = CMMotionManager()
     var samples: [Sample3D] = []
     var position: GLKVector3 = GLKVector3()
@@ -36,6 +37,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     var alert: UIAlertController? = nil
     var logging: Bool = false
     let DATA_FILE_NAME = "log.csv"
+    var LETTER: String = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,28 +130,28 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
             let accelY = String(userAcceleration.y)
             let accelZ = String(userAcceleration.z)
             
-            var letter = "something is wrong if you see this"
+            LETTER = "something is wrong if you see this"
             switch self.letterControl.selectedSegmentIndex {
                 case 0:
-                    letter = "A"
+                    LETTER = "A"
                 case 1:
-                    letter = "B"
+                    LETTER = "B"
                 case 2:
-                    letter = "C"
+                    LETTER = "C"
                 case 3:
-                    letter = "D"
+                    LETTER = "D"
                 case 4:
-                    letter = "E"
+                    LETTER = "E"
                 case 5:
-                    letter = "V"
+                    LETTER = "V"
                 case 6:
-                    letter = "W"
+                    LETTER = "W"
                 case 7:
-                    letter = "X"
+                    LETTER = "X"
                 case 8:
-                    letter = "Y"
+                    LETTER = "Y"
                 case 9:
-                    letter = "Z"
+                    LETTER = "Z"
                 default: ()
             }
             
