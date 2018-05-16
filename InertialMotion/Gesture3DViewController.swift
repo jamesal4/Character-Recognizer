@@ -25,6 +25,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var letterTextField: UITextField!
+    @IBOutlet weak var indicatorView: UIView!
     @IBOutlet weak var glkView: GLKView!
     
     var touchCount: Int = 0
@@ -75,6 +76,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         
         clearCounts()
         
+        self.indicatorView.backgroundColor = .red
         pickerOpen = false
     }
     
@@ -120,13 +122,10 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !pickerOpen {
             logging = true
+            indicatorView.backgroundColor = .green
             print("logging start")
         }
         print("touches began")
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //updateTouches(event)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -137,10 +136,10 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
             logLineToDataFile(line)
             letterCount[curLetter]! += 1
             countLabel.text = String(letterCount[curLetter]!)
+            indicatorView.backgroundColor = .red
         } else {
             self.view.endEditing(true)
         }
-        print(self.letterCount)
         
         print("touches ended")
     }

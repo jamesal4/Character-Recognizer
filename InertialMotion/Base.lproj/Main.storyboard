@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -182,10 +183,19 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F66-B5-3ya">
+                                <rect key="frame" x="67" y="269" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="IYE-iM-oH3"/>
+                                    <constraint firstAttribute="width" secondItem="F66-B5-3ya" secondAttribute="height" multiplier="15:8" id="gB4-8E-tKU"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <constraints>
                             <constraint firstItem="JqI-7s-BIY" firstAttribute="top" secondItem="5oZ-6H-Eqv" secondAttribute="bottom" constant="8" id="0Sg-Cc-YCq"/>
                             <constraint firstItem="rJz-6i-KMf" firstAttribute="centerX" secondItem="KeT-i5-3Nj" secondAttribute="centerX" id="5Ei-jM-Ko1"/>
+                            <constraint firstItem="F66-B5-3ya" firstAttribute="centerY" secondItem="KeT-i5-3Nj" secondAttribute="centerY" id="6gU-Gy-5fz"/>
                             <constraint firstItem="Lyf-t1-O0d" firstAttribute="top" secondItem="p4l-1a-uoa" secondAttribute="bottom" constant="9" id="6vw-GC-QZk"/>
                             <constraint firstItem="p4l-1a-uoa" firstAttribute="top" secondItem="JqI-7s-BIY" secondAttribute="bottom" constant="6" id="8zf-XU-deC"/>
                             <constraint firstItem="5oZ-6H-Eqv" firstAttribute="centerX" secondItem="KeT-i5-3Nj" secondAttribute="centerX" id="CZA-BD-8ti"/>
@@ -196,6 +206,7 @@
                             <constraint firstItem="Z8S-Za-v0m" firstAttribute="top" secondItem="cBT-Jp-fAb" secondAttribute="bottom" id="XVU-au-wGf"/>
                             <constraint firstItem="9kI-5n-2LV" firstAttribute="centerX" secondItem="KeT-i5-3Nj" secondAttribute="centerX" id="amA-lB-mEA"/>
                             <constraint firstItem="p4l-1a-uoa" firstAttribute="centerX" secondItem="KeT-i5-3Nj" secondAttribute="centerX" id="fzT-bK-n4X"/>
+                            <constraint firstItem="F66-B5-3ya" firstAttribute="centerX" secondItem="KeT-i5-3Nj" secondAttribute="centerX" id="iyp-4J-QmF"/>
                             <constraint firstItem="rJz-6i-KMf" firstAttribute="top" secondItem="9kI-5n-2LV" secondAttribute="bottom" constant="8" id="s4g-1q-gaW"/>
                             <constraint firstItem="5oZ-6H-Eqv" firstAttribute="top" secondItem="rJz-6i-KMf" secondAttribute="bottom" constant="8" id="tOR-bA-xRe"/>
                             <constraint firstItem="Lyf-t1-O0d" firstAttribute="centerX" secondItem="KeT-i5-3Nj" secondAttribute="centerX" id="yaK-pW-YaF"/>
@@ -206,6 +217,7 @@
                     <connections>
                         <outlet property="countLabel" destination="Lyf-t1-O0d" id="Bpg-Ey-9S4"/>
                         <outlet property="glkView" destination="KeT-i5-3Nj" id="oJm-Bw-n3R"/>
+                        <outlet property="indicatorView" destination="F66-B5-3ya" id="xuW-3z-Xl3"/>
                         <outlet property="letterTextField" destination="JqI-7s-BIY" id="8X7-T6-Ih7"/>
                         <outlet property="nameTextField" destination="p4l-1a-uoa" id="GJu-1v-3nt"/>
                         <outlet property="recognizedLabel" destination="cBT-Jp-fAb" id="bh0-eZ-H0a"/>
