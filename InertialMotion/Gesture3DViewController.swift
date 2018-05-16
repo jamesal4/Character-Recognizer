@@ -37,7 +37,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     var logging: Bool = false
     let DATA_FILE_NAME = "log.csv"
     var curLetter: String = ""
-    let LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    let LETTERS = ["A", "B", "C", "D", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
     var letterCount = [String: Int]()
     var pickerOpen: Bool = false
     
