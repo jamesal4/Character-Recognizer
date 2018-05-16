@@ -22,14 +22,12 @@ private func GLKVector3FromCMAcceleration(_ acceleration: CMAcceleration) -> GLK
 class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, MFMailComposeViewControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var recognizedLabel: UILabel?
-    @IBOutlet weak var letterControl: UISegmentedControl!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var letterTextField: UITextField!
     @IBOutlet weak var glkView: GLKView!
     
     var touchCount: Int = 0
-    var letterCount = [String: Int]()
     var motionManager: CMMotionManager = CMMotionManager()
     var samples: [Sample3D] = []
     var position: GLKVector3 = GLKVector3()
@@ -38,8 +36,11 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     var alert: UIAlertController? = nil
     var logging: Bool = false
     let DATA_FILE_NAME = "log.csv"
-    var LETTER: String = ""
-    var LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    var curLetter: String = ""
+    let LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    var letterCount = [String: Int]()
+    var pickerOpen: Bool = false
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,20 +65,28 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         let datePicker = UIPickerView()
         datePicker.delegate = self
         datePicker.dataSource = self
-        self.nameTextField.inputView = datePicker
-        datePicker.selectRow(0, inComponent: 0, animated: false)
-        print("numComponents: "+String(datePicker.numberOfComponents))
-        //print("")
+        
+        self.letterTextField.inputView = datePicker
+        self.letterTextField.tintColor = .clear
+        self.letterTextField.text = LETTERS[0]
+        self.letterTextField.addTarget(self, action: #selector(Gesture3DViewController.letterTextFieldEditingBegan(_:)), for: .editingDidBegin)
+        self.letterTextField.addTarget(self, action: #selector(Gesture3DViewController.letterTextFieldEditingEnded(_:)), for: .editingDidEnd)
+        curLetter = LETTERS[0]
+        
+        clearCounts()
+        
+        pickerOpen = false
     }
     
-    @objc fileprivate func letterControlChanged(_ sender: UIDatePicker) {
-        print("letter control changed")
-        if let val = letterCount[LETTER] {
-            countLabel.text = String(val)
-        } else {
-            letterCount[LETTER] = 0
-            countLabel.text = "0"
-        }
+    @objc fileprivate func letterTextFieldEditingBegan(_ sender: UIDatePicker) {
+        print(self.view.frame)
+        print(sender.frame)
+        pickerOpen = true
+    }
+    
+    @objc fileprivate func letterTextFieldEditingEnded(_ sender: UIDatePicker) {
+        print("editing ended")
+        pickerOpen = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -88,6 +97,12 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         delegate.gestureProcessor.delegate = self
 
         super.viewDidAppear(animated)
+    }
+    
+    func clearCounts() {
+        for (_, element) in LETTERS.enumerated() {
+            letterCount[element] = 0
+        }
     }
     
     func updateTouches(_ event: UIEvent?) {
@@ -103,25 +118,30 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        updateTouches(event)
-        logging = true
+        if !pickerOpen {
+            logging = true
+            print("logging start")
+        }
         print("touches began")
-        self.glkView.backgroundColor = .green
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        updateTouches(event)
+        //updateTouches(event)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        updateTouches(event)
-        logging = false
-        let zero = String(0)
-        let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@,%@\n", zero, zero, zero, zero, zero, zero, zero, zero, zero)
-        logLineToDataFile(line)
-        letterCount[LETTER]! += 1
-        countLabel.text = String(letterCount[LETTER]!)
-        self.glkView.backgroundColor = .red
+        if !pickerOpen {
+            logging = false
+            let zero = String(0)
+            let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@,%@\n", zero, zero, zero, zero, zero, zero, zero, zero, zero)
+            logLineToDataFile(line)
+            letterCount[curLetter]! += 1
+            countLabel.text = String(letterCount[curLetter]!)
+        } else {
+            self.view.endEditing(true)
+        }
+        print(self.letterCount)
+        
         print("touches ended")
     }
     
@@ -142,13 +162,11 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
             let accelY = String(userAcceleration.y)
             let accelZ = String(userAcceleration.z)
             
-            LETTER = "something is wrong if you see this"
-            
             let name = nameTextField.text!
             
             let timeInterval = String(NSDate().timeIntervalSince1970)
             // write acceleration, timeInterval, and attitude to file
-            let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", timeInterval, roll, pitch, yaw, accelX, accelY, accelZ,LETTER,name)
+            let line = String.init(format: "%@,%@,%@,%@,%@,%@,%@,%@\n", timeInterval, roll, pitch, yaw, accelX, accelY, accelZ,curLetter,name)
             logLineToDataFile(line)
         }
     }
@@ -203,8 +221,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
         }
         
         self.logLineToDataFile("Time,Roll,Pitch,Yaw,AccelX,AccelY,AccelZ,Letter,Name\n")
-        letterCount.removeAll()
-        letterCount[LETTER] = 0
+        clearCounts()
         countLabel.text = "0"
     }
     
@@ -251,5 +268,11 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return LETTERS[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        letterTextField.text = LETTERS[row]
+        curLetter = LETTERS[row]
+        countLabel.text = String(letterCount[curLetter]!)
     }
 }
