@@ -127,10 +127,12 @@ letter_encodings = compute_letter_encodings(train_samples_encodings, y_train)
 train_accuracy = get_overall_accuracy(letter_encodings, train_samples_encodings, y_train)
 test_accuracy = get_overall_accuracy(letter_encodings, test_sample_encodings, y_test)
 
+print ''
 print 'train_accuracy', train_accuracy
 print 'test_accuracy', test_accuracy
+print ''
 
-print 'recall and precision'
+print 'letter-wise recall and precision'
 recall = get_recall(letter_encodings, all_sample_encodings, y)
 precision = get_precision(letter_encodings, all_sample_encodings, y)
 for letter in set(y):
