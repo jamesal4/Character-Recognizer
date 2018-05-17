@@ -101,7 +101,7 @@ def get_precision(letter_encodings, sample_encodings, labels):
 ############# Helper functions
 
 
-path_to_model = './models/ae.h5'
+path_to_model = './models/autoencoder'
 x = np.array([example.flatten() for example in allData])
 x, y = unison_shuffle(x, stringLabels)
 
@@ -116,7 +116,7 @@ train_autoencoder(x_train, x_test, path_to_model)
 
 
 ## Calculate encodings
-model = keras.models.load_model(path_to_model)
+model = keras.models.load_model(path_to_model+'.h5')
 embedding_fn = keras.backend.function([model.layers[0].input], [model.layers[2].output])
 all_sample_encodings = embedding_fn([x, 0])[0]
 train_samples_encodings = embedding_fn([x_train, 0])[0]

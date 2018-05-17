@@ -1,6 +1,7 @@
 import keras
 import numpy as np
 
+from keras.callbacks import ModelCheckpoint
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D, Flatten, Reshape
 from keras.models import Model
 
@@ -52,6 +53,7 @@ def train_autoencoder(x_train, x_test, path_to_model):
   # loss = 'mse'
   # loss = 'binary_crossentropy'
   model = create_network(input_dim, loss)
+  checkpointer = ModelCheckpoint(filepath=path_to_model+'_model_weights.h5', verbose=1, save_best_only=True)
   model.summary()
-  model.fit(x_train, x_train, epochs=150, shuffle=True, validation_data=(x_test, x_test))
-  model.save(path_to_model)
+  model.fit(x_train, x_train, epochs=150, shuffle=True, validation_data=(x_test, x_test), callbacks=[checkpointer])
+  model.save(path_to_model+'.h5')
