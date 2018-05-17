@@ -5,6 +5,7 @@ import numpy as np
 letters = ["A","N","Z"]
 allData = []
 allLabels = []
+stringLabels = []
 
 # for i in range(len(letters)):
 #     n = 0
@@ -45,6 +46,7 @@ with open('JamesZ.csv') as csvfile:
             innerArray.append(npRow)
 zLabels = np.array([[1,0,0,0]]*n)
 allLabels.extend(zLabels)
+stringLabels.extend(np.array(["Z"]*n))
 
 nData = []
 n = 0
@@ -64,6 +66,8 @@ with open('JamesN.csv') as csvfile:
             innerArray.append(npRow)
 nLabels = np.array([[0,1,0,0]]*n)
 allLabels.extend(nLabels)
+stringLabels.extend(np.array(["N"]*n))
+
 
 aData = []
 n = 0
@@ -83,6 +87,8 @@ with open('JamesA.csv') as csvfile:
             innerArray.append(npRow)
 aLabels = np.array([[0,0,1,0]]*n)
 allLabels.extend(nLabels)
+stringLabels.extend(np.array(["A"]*n))
+
 
 vData = []
 n = 0
@@ -103,11 +109,12 @@ n = 50
 allData = allData[0:200] #remove last data point since 51 instead of 50
 nLabels = np.array([[0,0,0,1]]*n)
 allLabels.extend(nLabels)
-
+stringLabels.extend(np.array(["V"]*n))
 
 
 allData = np.array(allData)
 allLabels = np.array(allLabels)
+stringLabels = np.array(stringLabels)
 
 def getLengthOfLongestExample(data):
     maxLength = 0
