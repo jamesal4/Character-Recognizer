@@ -262,7 +262,7 @@ class Gesture3DViewController: RibbonViewController, GestureProcessorDelegate, M
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 26
+        return LETTERS.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
