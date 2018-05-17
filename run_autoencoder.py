@@ -24,7 +24,7 @@ def compute_letter_encodings(train_samples_encodings, y_train):
 
   return encodings
 
-def get_nearest_ltter(letter_encodings, sample_encoding):
+def get_nearest_letter(letter_encodings, sample_encoding):
   nearest_letter = 0
   min_dist = float('inf')
 
@@ -38,16 +38,65 @@ def get_nearest_ltter(letter_encodings, sample_encoding):
 
   return nearest_letter
 
-def get_accuracy(letter_encodings, sample_encodings, labels):
+def get_overall_accuracy(letter_encodings, sample_encodings, labels):
   n_total = len(sample_encodings)
   n_correct = 0
 
   for ix, sample_encoding in enumerate(sample_encodings):
-    nearest_letter = get_nearest_ltter(letter_encodings, sample_encoding)
+    nearest_letter = get_nearest_letter(letter_encodings, sample_encoding)
     if nearest_letter == labels[ix]:
       n_correct += 1
 
   return float(n_correct)/n_total
+
+# how many relevant items are selected?
+#   find nearest_letter for all encodings for given letter
+#   (num A-examples correctly classified as "A")/(num examples listed as "A")
+def get_recall(letter_encodings, sample_encodings, labels):
+  letters = set(labels)
+
+  recall = {}
+
+  for letter in letters:
+    letter_sample_encodings = sample_encodings[labels==letter]
+
+    n_total = len(letter_sample_encodings)
+    n_correct = 0
+
+    for sample_encoding in letter_sample_encodings:
+      nearest_letter = get_nearest_letter(letter_encodings, sample_encoding)
+      if nearest_letter == letter:
+        n_correct += 1
+
+    recall[letter] = float(n_correct)/n_total
+
+  return recall
+
+# how many selected items are relevant?
+#   find nearest_letter for all encodings
+#   (num examples correctly classified as "A")/(num total examples classified as "A")
+def get_precision(letter_encodings, sample_encodings, labels):
+  letters = set(labels)
+
+  precision = {}
+
+  predictions = []
+  for ix, sample_encoding in enumerate(sample_encodings):
+    nearest_letter = get_nearest_letter(letter_encodings, sample_encoding)
+    predictions.append(nearest_letter)
+  predictions = np.array(predictions)
+
+  for letter in letters:
+    total_predictions_for_letter = len(np.where(predictions==letter)[0])
+    total_correct_predictions_for_letter = 0
+
+    for ix, label in enumerate(labels):
+      if predictions[ix] == labels[ix] == letter:
+        total_correct_predictions_for_letter += 1
+
+    precision[letter] = float(total_correct_predictions_for_letter)/total_predictions_for_letter
+
+  return precision
 
 ############# Helper functions
 
@@ -65,22 +114,25 @@ y_test = y[num_training_samples:]
 
 train_autoencoder(x_train, x_test, path_to_model)
 
-# 1. Compute each example's sample-encoding
-# 2. Compute letter-encoding - average sample-encoding for all examples for given letter
-# 3. Calculate training-accuracy
-# 4. Calculate test-accuracy
 
 ## Calculate encodings
 model = keras.models.load_model(path_to_model)
 embedding_fn = keras.backend.function([model.layers[0].input], [model.layers[2].output])
+all_sample_encodings = embedding_fn([x, 0])[0]
 train_samples_encodings = embedding_fn([x_train, 0])[0]
 test_sample_encodings = embedding_fn([x_test, 0])[0]
 letter_encodings = compute_letter_encodings(train_samples_encodings, y_train)
 
-train_accuracy = get_accuracy(letter_encodings, train_samples_encodings, y_train)
-test_accuracy = get_accuracy(letter_encodings, test_sample_encodings, y_test)
+## Calculate train/test accuracy
+train_accuracy = get_overall_accuracy(letter_encodings, train_samples_encodings, y_train)
+test_accuracy = get_overall_accuracy(letter_encodings, test_sample_encodings, y_test)
 
 print 'train_accuracy', train_accuracy
 print 'test_accuracy', test_accuracy
 
+print 'recall and precision'
+recall = get_recall(letter_encodings, all_sample_encodings, y)
+precision = get_precision(letter_encodings, all_sample_encodings, y)
+for letter in set(y):
+  print letter, round(recall[letter], 3), round(precision[letter], 3)
 
