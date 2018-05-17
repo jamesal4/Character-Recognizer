@@ -1,10 +1,14 @@
 import keras
 import numpy as np
 
-from csvImporting import allData, allLabels
-
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D, Flatten, Reshape
 from keras.models import Model
+
+def unison_shuffle(a, b):
+  assert len(a) == len(b)
+  p = np.random.permutation(len(a))
+  return a[p], b[p]
+
 
 def create_network(input_dim, loss):
   input_img = Input(shape=(input_dim,))
@@ -41,21 +45,13 @@ def create_network(input_dim, loss):
   autoencoder.compile(optimizer='adadelta', loss=loss)
   return autoencoder
 
-def main():
+def train_autoencoder(x_train, x_test, path_to_model):
+  input_dim = x_train.shape[1]
 
-  x = np.array([example.flatten() for example in allData])
-
-  input_dim = x.shape[1]
-
-  x_train = x[:int(.7*len(x))]
-  x_test = x[int(.7*len(x)):]
-
-  # loss = 'mae'
-  loss = 'binary_crossentropy'
+  loss = 'mae'
+  # loss = 'mse'
+  # loss = 'binary_crossentropy'
   model = create_network(input_dim, loss)
   model.summary()
   model.fit(x_train, x_train, epochs=150, shuffle=True, validation_data=(x_test, x_test))
-  model.save('./models/ae.h5')
-
-if __name__ == '__main__':
-    main()
+  model.save(path_to_model)
