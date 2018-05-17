@@ -35,7 +35,7 @@ with open('JamesZ.csv') as csvfile:
     for row in reader:
         if row[0] == "Time":
             continue
-        npRow = np.array(row[:-1],dtype=np.float32)[1:]
+        npRow = np.array(row[:-2],dtype=np.float32)[1:]
         if npRow.all() == np.zeros(6).all():
             n += 1
             allData.append(np.array(innerArray))
@@ -54,7 +54,7 @@ with open('JamesN.csv') as csvfile:
     for row in reader:
         if row[0] == "Time":
             continue
-        npRow = np.array(row[:-1],dtype=np.float32)[1:]
+        npRow = np.array(row[:-2],dtype=np.float32)[1:]
         if npRow.all() == np.zeros(6).all():
             n += 1
             allData.append(np.array(innerArray))
@@ -73,7 +73,7 @@ with open('JamesA.csv') as csvfile:
     for row in reader:
         if row[0] == "Time":
             continue
-        npRow = np.array(row[:-1],dtype=np.float32)[1:]
+        npRow = np.array(row[:-2],dtype=np.float32)[1:]
         if npRow.all() == np.zeros(6).all():
             n += 1
             allData.append(np.array(innerArray))
@@ -92,7 +92,7 @@ with open('KevinV.csv') as csvfile:
     for row in reader:
         if row[0] == "Time":
             continue
-        npRow = np.array(row[:-1],dtype=np.float32)[1:]
+        npRow = np.array(row[:-2],dtype=np.float32)[1:]
         if npRow.all() == np.zeros(6).all():
             allData.append(np.array(innerArray))
             vData.append(innerArray)
